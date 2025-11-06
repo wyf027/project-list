@@ -20,12 +20,17 @@ export default async function ProjectsPage() {
             </div>
             <div className="flex items-center gap-4">
               <Button variant="outline" size="sm" asChild>
+                <Link href="/repos">
+                  <Github className="w-4 h-4 mr-2" />
+                  我的仓库
+                </Link>
+              </Button>
+              <Button variant="outline" size="sm" asChild>
                 <a href="https://github.com/leno23/project-list" target="_blank" rel="noopener noreferrer">
                   <Github className="w-4 h-4 mr-2" />
                   GitHub
                 </a>
               </Button>
-              <Button size="sm">联系我</Button>
             </div>
           </div>
         </div>

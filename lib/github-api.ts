@@ -1,3 +1,19 @@
+export interface GitHubRepo {
+  id: number
+  name: string
+  full_name: string
+  description: string | null
+  html_url: string
+  homepage: string | null
+  language: string | null
+  stargazers_count: number
+  forks_count: number
+  topics: string[]
+  created_at: string
+  updated_at: string
+  pushed_at: string
+}
+
 export interface GitHubIssue {
   id: number
   number: number
@@ -49,7 +65,7 @@ export async function fetchGitHubIssues(owner: string, repo: string): Promise<Gi
       },
       // 添加缓存控制
       next: { revalidate: 3600 }, // 1小时缓存
-    })
+    } as RequestInit & { next?: { revalidate?: number } })
 
     if (!response.ok) {
       throw new Error(`GitHub API error: ${response.status}`)
@@ -99,13 +115,13 @@ function parseIssueBody(body: string | null): {
   }
 
   // 解析描述
-  const descMatch = body.match(/## 描述\s*\n(.*?)(?=\n##|\n---|\n$)/s)
+  const descMatch = body.match(/## 描述\s*\n([\s\S]*?)(?=\n##|\n---|\n$)/)
   if (descMatch) {
     sections.description = descMatch[1].trim()
   }
 
   // 解析详细描述
-  const longDescMatch = body.match(/## 详细描述\s*\n(.*?)(?=\n##|\n---|\n$)/s)
+  const longDescMatch = body.match(/## 详细描述\s*\n([\s\S]*?)(?=\n##|\n---|\n$)/)
   if (longDescMatch) {
     sections.longDescription = longDescMatch[1].trim()
   } else {
@@ -113,7 +129,7 @@ function parseIssueBody(body: string | null): {
   }
 
   // 解析技术栈
-  const techMatch = body.match(/## 技术栈\s*\n(.*?)(?=\n##|\n---|\n$)/s)
+  const techMatch = body.match(/## 技术栈\s*\n([\s\S]*?)(?=\n##|\n---|\n$)/)
   if (techMatch) {
     sections.technologies = techMatch[1]
       .split(/[,\n]/)
@@ -122,7 +138,7 @@ function parseIssueBody(body: string | null): {
   }
 
   // 解析功能特性
-  const featuresMatch = body.match(/## 功能特性\s*\n(.*?)(?=\n##|\n---|\n$)/s)
+  const featuresMatch = body.match(/## 功能特性\s*\n([\s\S]*?)(?=\n##|\n---|\n$)/)
   if (featuresMatch) {
     sections.features = featuresMatch[1]
       .split("\n")
@@ -131,7 +147,7 @@ function parseIssueBody(body: string | null): {
   }
 
   // 解析技术挑战
-  const challengesMatch = body.match(/## 技术挑战\s*\n(.*?)(?=\n##|\n---|\n$)/s)
+  const challengesMatch = body.match(/## 技术挑战\s*\n([\s\S]*?)(?=\n##|\n---|\n$)/)
   if (challengesMatch) {
     sections.challenges = challengesMatch[1]
       .split("\n")
@@ -140,7 +156,7 @@ function parseIssueBody(body: string | null): {
   }
 
   // 解析学习收获
-  const learningsMatch = body.match(/## 学习收获\s*\n(.*?)(?=\n##|\n---|\n$)/s)
+  const learningsMatch = body.match(/## 学习收获\s*\n([\s\S]*?)(?=\n##|\n---|\n$)/)
   if (learningsMatch) {
     sections.learnings = learningsMatch[1]
       .split("\n")
@@ -209,4 +225,30 @@ export function convertIssueToProject(issue: GitHubIssue): ProjectFromIssue {
 export async function fetchProjectsFromGitHub(): Promise<ProjectFromIssue[]> {
   const issues = await fetchGitHubIssues("leno23", "project-list")
   return issues.map(convertIssueToProject)
+}
+
+// 获取用户的 GitHub 仓库（过滤 w- 开头的仓库）
+export async function fetchUserRepos(username: string): Promise<GitHubRepo[]> {
+  try {
+    const response = await fetch(`https://api.github.com/users/${username}/repos?per_page=100&sort=updated`, {
+      headers: {
+        Accept: "application/vnd.github.v3+json",
+        // 如果需要认证，可以添加 token
+        // 'Authorization': `token ${process.env.GITHUB_TOKEN}`,
+      },
+      // 添加缓存控制
+      next: { revalidate: 3600 }, // 1小时缓存
+    } as RequestInit & { next?: { revalidate?: number } })
+
+    if (!response.ok) {
+      throw new Error(`GitHub API error: ${response.status}`)
+    }
+
+    const repos: GitHubRepo[] = await response.json()
+    // 过滤出 w- 开头的仓库
+    return repos.filter((repo) => repo.name.startsWith("w-"))
+  } catch (error) {
+    console.error("Error fetching GitHub repos:", error)
+    return []
+  }
 }
