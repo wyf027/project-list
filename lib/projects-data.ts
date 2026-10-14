@@ -37,10 +37,10 @@ const titleCatalog: Project = {
   learnings: [],
 }
 
-const previewOverrides: Record<string, { image: string; demoUrl?: string; previewUnavailable?: boolean }> = {
-  "issue-8": { image: "/previews/issue-8.jpg", demoUrl: "https://w-web3-connector.vercel.app/" },
+const previewOverrides: Record<string, { image: string; demoUrl?: string; githubUrl?: string; previewUnavailable?: boolean }> = {
+  "issue-8": { image: "/previews/issue-8.jpg", demoUrl: "https://w-web3-connector.vercel.app/", githubUrl: "https://github.com/wyf027/w-wallet-sdk" },
   "issue-7": { image: "/previews/issue-7.jpg" },
-  "issue-6": { image: "/previews/issue-6.jpg", previewUnavailable: true },
+  "issue-6": { image: "/previews/issue-6.jpg", previewUnavailable: true, githubUrl: "https://github.com/wyf027/w-stake-fe" },
   "issue-5": { image: "/previews/issue-5.jpg" },
   "issue-4": { image: "/previews/issue-4.jpg", previewUnavailable: true },
   "issue-3": { image: "/previews/issue-3.jpg" },
@@ -54,7 +54,7 @@ export async function getProjects(): Promise<Project[]> {
   return [titleCatalog, ...items.map((project) => ({
     ...project,
     ...previewOverrides[project.id],
-    githubUrl: project.githubUrl?.replace("github.com/leno23/", "github.com/wyf027/"),
+    githubUrl: previewOverrides[project.id]?.githubUrl ?? project.githubUrl?.replace("github.com/leno23/", "github.com/wyf027/"),
   }))]
 }
 
