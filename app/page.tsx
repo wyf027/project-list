@@ -87,7 +87,7 @@ export default async function ProjectsPage() {
 
         {/* Projects Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {projects.map((project) => (
+          {projects.map((project, index) => (
             <Card key={project.id} className="group overflow-hidden border-slate-800 bg-slate-900/70 hover:shadow-lg transition-all duration-300 hover:-translate-y-1">
               <CardHeader className="pb-3">
                 <div className="flex items-start justify-between">
@@ -116,7 +116,7 @@ export default async function ProjectsPage() {
                 <div className="aspect-video bg-gradient-to-br from-slate-800 to-slate-900 rounded-lg mb-4 overflow-hidden">
                   <img
                     src={project.image || "/placeholder.svg"}
-                    loading="lazy"
+                    loading={index < 3 ? "eager" : "lazy"}
                     decoding="async"
                     width={1440}
                     height={900}
