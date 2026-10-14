@@ -3,6 +3,7 @@ import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Github, ExternalLink, Calendar, Star, RefreshCw } from "lucide-react"
 import Link from "next/link"
+import { ShaderBackground } from "@/components/shader-background"
 import { getProjects } from "@/lib/projects-data"
 
 export default async function ProjectsPage() {
@@ -10,6 +11,7 @@ export default async function ProjectsPage() {
 
   return (
     <div className="min-h-dvh w-full bg-gradient-to-br from-slate-950 via-slate-950 to-slate-900">
+      <ShaderBackground />
       {/* Header */}
       <header className="border-b bg-slate-950/90 backdrop-blur-sm sticky top-0 z-50">
         <div className="w-full px-4 py-4 sm:px-6 lg:px-8">
@@ -37,7 +39,7 @@ export default async function ProjectsPage() {
       </header>
 
       {/* Main Content */}
-      <main className="w-full px-4 py-6 sm:px-6 lg:px-8">
+      <main className="relative w-full px-4 py-6 sm:px-6 lg:px-8">
         {/* Stats */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
           <Card>
@@ -88,7 +90,10 @@ export default async function ProjectsPage() {
         {/* Projects Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 gap-6">
           {projects.map((project, index) => (
-            <Card key={project.id} className="group overflow-hidden border-slate-800 bg-slate-900/70 hover:shadow-lg transition-all duration-300 hover:-translate-y-1">
+            <Card key={project.id} className="project-card group relative overflow-hidden border-slate-700/60 bg-slate-950/75 backdrop-blur-md hover:border-cyan-400/50 hover:shadow-[0_0_32px_-12px_rgba(34,211,238,0.35)] transition-all duration-300 hover:-translate-y-1">
+              {project.demoUrl && <a href={project.demoUrl} target="_blank" rel="noopener noreferrer"
+                aria-label={`打开 ${project.title} 在线演示（新标签页）`}
+                className="absolute inset-0 z-10 rounded-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-cyan-300" />}
               <CardHeader className="pb-3">
                 <div className="flex items-start justify-between">
                   <div className="flex-1">
@@ -144,13 +149,11 @@ export default async function ProjectsPage() {
                 {/* Actions */}
                 <div className="flex flex-wrap items-center justify-between gap-4">
                   <div className="flex items-center gap-2">
-                    <Link href={`/projects/${project.id}`}>
-                      <Button size="sm" className="text-xs">
-                        查看详情
-                      </Button>
+                    <Link href={`/projects/${project.id}`} className="relative z-20 rounded px-1 py-2 text-xs text-slate-400 transition-colors hover:text-cyan-200 focus-visible:outline focus-visible:outline-cyan-300">
+                      详情 <span aria-hidden="true">↗</span>
                     </Link>
                     {project.demoUrl && (
-                      <Button size="sm" variant="outline" className="text-xs bg-transparent" asChild>
+                      <Button size="sm" variant="outline" className="relative z-20 text-xs bg-transparent" asChild>
                         <a href={project.demoUrl} target="_blank" rel="noopener noreferrer">
                           <ExternalLink className="w-3 h-3 mr-1" />
                           演示
@@ -161,14 +164,14 @@ export default async function ProjectsPage() {
 
                   <div className="flex items-center gap-1">
                     {project.githubUrl && (
-                      <Button size="sm" variant="ghost" className="text-xs p-2" asChild>
+                      <Button size="sm" variant="ghost" className="relative z-20 text-xs p-2" asChild>
                         <a href={project.githubUrl} target="_blank" rel="noopener noreferrer">
                           <Github className="w-4 h-4" />
                         </a>
                       </Button>
                     )}
                     {project.issueUrl && (
-                      <Button size="sm" variant="ghost" className="text-xs p-2" asChild>
+                      <Button size="sm" variant="ghost" className="relative z-20 text-xs p-2" asChild>
                         <a href={project.issueUrl} target="_blank" rel="noopener noreferrer" title="查看 GitHub Issue">
                           #{project.issueNumber}
                         </a>

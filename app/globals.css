@@ -93,3 +93,8 @@
     @apply bg-background text-foreground;
   }
 }
+
+@media (prefers-reduced-motion: reduce) {
+  .shader-background { opacity: 0 !important; }
+  .project-card, .project-card img { transition: none !important; transform: none !important; }
+}

@@ -38,14 +38,14 @@ const titleCatalog: Project = {
   learnings: [],
 }
 
-const previewOverrides: Record<string, { image: string; demoUrl?: string; githubUrl?: string; previewUnavailable?: boolean }> = {
-  "issue-8": { image: "/previews/issue-8.jpg", demoUrl: "https://w-web3-connector.vercel.app/", githubUrl: "https://github.com/wyf027/w-wallet-sdk" },
-  "issue-7": { image: "/previews/issue-7.jpg" },
-  "issue-6": { image: "/previews/issue-6.jpg", previewUnavailable: true, githubUrl: "https://github.com/wyf027/w-stake-fe" },
-  "issue-5": { image: "/previews/issue-5.jpg" },
-  "issue-4": { image: "/previews/issue-4.jpg", previewUnavailable: true },
-  "issue-3": { image: "/previews/issue-3.jpg" },
-  "issue-2": { image: "/previews/issue-2.jpg" },
+const previewOverrides: Record<string, { image: string; demoUrl?: string; githubUrl?: string; previewUnavailable?: boolean; status?: Project["status"] }> = {
+  "issue-8": { status: "completed", image: "/previews/issue-8.jpg", demoUrl: "https://w-web3-connector.vercel.app/", githubUrl: "https://github.com/wyf027/w-wallet-sdk" },
+  "issue-7": { status: "completed", image: "/previews/issue-7.jpg" },
+  "issue-6": { status: "completed", demoUrl: "https://wyf-dapp-fe-lesson1.vercel.app/stake", image: "/previews/issue-6.jpg", githubUrl: "https://github.com/wyf027/w-stake-fe" },
+  "issue-5": { status: "completed", image: "/previews/issue-5.jpg" },
+  "issue-4": { status: "completed", image: "/previews/issue-4.jpg" },
+  "issue-3": { status: "completed", image: "/previews/issue-3.jpg" },
+  "issue-2": { status: "completed", image: "/previews/issue-2.jpg" },
 }
 
 const fallbackProjects = issueSnapshot.map((issue) => convertIssueToProject(issue))
