@@ -176,7 +176,7 @@ function parseIssueBody(body: string | null): {
   }
 
   // 解析图片
-  const imageMatch = body.match(/!\[.*?\]$$(.*?)$$/)
+  const imageMatch = body.match(/!\[[^\]]*\]\(([^\s)]+)(?:\s+"[^"]*")?\)/)
   if (imageMatch) {
     sections.image = imageMatch[1]
   }
@@ -223,7 +223,7 @@ export function convertIssueToProject(issue: GitHubIssue): ProjectFromIssue {
 
 // 获取并转换所有项目数据
 export async function fetchProjectsFromGitHub(): Promise<ProjectFromIssue[]> {
-  const issues = await fetchGitHubIssues("leno23", "project-list")
+  const issues = await fetchGitHubIssues("wyf027", "project-list")
   return issues.map(convertIssueToProject)
 }
 

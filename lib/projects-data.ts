@@ -1,4 +1,5 @@
-import { fetchProjectsFromGitHub } from "./github-api"
+import issueSnapshot from "./project-issues.json"
+import { convertIssueToProject, fetchProjectsFromGitHub } from "./github-api"
 
 export interface Project {
   id: string
@@ -17,63 +18,47 @@ export interface Project {
   learnings: string[]
   issueUrl?: string
   issueNumber?: number
+  previewUnavailable?: boolean
 }
 
-// 默认项目数据（作为后备）
-const defaultProjects: Project[] = [
-  {
-    id: "minesweeper-game",
-    title: "扫雷游戏",
-    description: "经典的扫雷游戏，支持多种难度级别，具有现代化的用户界面和流畅的游戏体验。",
-    longDescription:
-      "这是一个完全重新设计的扫雷游戏，保留了经典游戏的所有乐趣，同时加入了现代化的界面设计和用户体验优化。游戏支持三种难度级别，包含计时器、最佳时间记录等功能。",
-    image: "/placeholder.svg?height=200&width=300&text=扫雷游戏",
-    technologies: ["React", "TypeScript", "Next.js", "Tailwind CSS", "shadcn/ui"],
-    status: "completed",
-    githubUrl: "https://github.com/username/minesweeper",
-    demoUrl: "/minesweeper",
-    createdAt: "2024-01-15",
-    updatedAt: "2024-01-20",
-    features: [
-      "三种难度级别（初级、中级、高级）",
-      "智能首次点击保护",
-      "自动展开空白区域",
-      "右键标记功能",
-      "实时计时器",
-      "最佳时间记录",
-      "响应式设计",
-    ],
-    challenges: ["实现高效的地雷生成算法", "处理复杂的游戏状态管理", "优化用户交互体验"],
-    learnings: ["深入理解React Hooks的使用", "掌握复杂状态管理技巧", "提升算法设计能力"],
-  },
-]
+const titleCatalog: Project = {
+  id: "competitive-programming-zh",
+  title: "Codeforces · AtCoder 中文题库",
+  description: "20,470 道中文算法题，支持来源、算法标签与关键词筛选，并可按比赛浏览。",
+  longDescription: "整理 Codeforces 与 AtCoder 的中文题名、题面和比赛目录。机器翻译仅供学习参考，每道题均提供官方原题入口。题库数据截至 2026 年 8 月。",
+  image: "/previews/competitive-programming-zh.jpg",
+  technologies: ["Python", "HTML", "TailwindCSS", "算法"],
+  status: "completed",
+  demoUrl: "https://wyf-cp-zh.vercel.app/",
+  createdAt: "2026-07-14",
+  updatedAt: "2026-10-14",
+  features: ["20,470 道中文题目", "按来源、算法标签与关键词筛选", "2,039 场比赛目录", "官方原题链接"],
+  challenges: [],
+  learnings: [],
+}
 
-// 获取项目数据（优先从 GitHub 获取，失败时使用默认数据）
+const previewOverrides: Record<string, { image: string; demoUrl?: string; previewUnavailable?: boolean }> = {
+  "issue-8": { image: "/previews/issue-8.jpg", demoUrl: "https://w-web3-connector.vercel.app/" },
+  "issue-7": { image: "/previews/issue-7.jpg" },
+  "issue-6": { image: "/previews/issue-6.jpg", previewUnavailable: true },
+  "issue-5": { image: "/previews/issue-5.jpg" },
+  "issue-4": { image: "/previews/issue-4.jpg", previewUnavailable: true },
+  "issue-3": { image: "/previews/issue-3.jpg" },
+  "issue-2": { image: "/previews/issue-2.jpg" },
+}
+
+const fallbackProjects = issueSnapshot.map((issue) => convertIssueToProject(issue))
 export async function getProjects(): Promise<Project[]> {
-  try {
-    const githubProjects = await fetchProjectsFromGitHub()
-
-    if (githubProjects.length > 0) {
-      // 转换 GitHub 项目数据格式
-      return githubProjects.map((project) => ({
-        ...project,
-        issueUrl: project.issueUrl,
-        issueNumber: project.issueNumber,
-      }))
-    }
-
-    return defaultProjects
-  } catch (error) {
-    console.error("Failed to fetch projects from GitHub:", error)
-    return defaultProjects
-  }
+  const remote = await fetchProjectsFromGitHub()
+  const items = remote.length ? remote : fallbackProjects
+  return [titleCatalog, ...items.map((project) => ({
+    ...project,
+    ...previewOverrides[project.id],
+    githubUrl: project.githubUrl?.replace("github.com/leno23/", "github.com/wyf027/"),
+  }))]
 }
 
-// 根据 ID 获取单个项目
 export async function getProjectById(id: string): Promise<Project | null> {
-  const projects = await getProjects()
-  return projects.find((project) => project.id === id) || null
+  return (await getProjects()).find((project) => project.id === id) || null
 }
-
-// 兼容性导出（保持向后兼容）
-export const projects = defaultProjects
+export const projects = [titleCatalog, ...fallbackProjects]

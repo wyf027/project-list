@@ -7,12 +7,12 @@ import { fetchUserRepos } from "@/lib/github-api"
 
 export default async function ReposPage() {
   // 替换为你的 GitHub 用户名
-  const repos = await fetchUserRepos("leno23")
+  const repos = await fetchUserRepos("wyf027")
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-blue-50">
       {/* Header */}
-      <header className="border-b bg-white/80 backdrop-blur-sm sticky top-0 z-50">
+      <header className="border-b bg-slate-950/90 backdrop-blur-sm sticky top-0 z-50">
         <div className="container mx-auto px-4 py-6">
           <div className="flex items-center justify-between">
             <div>
@@ -27,10 +27,10 @@ export default async function ReposPage() {
               <h1 className="text-3xl font-bold bg-gradient-to-r from-gray-900 to-gray-600 bg-clip-text text-transparent">
                 GitHub 项目仓库
               </h1>
-              <p className="text-gray-600 mt-1">展示所有 w- 开头的项目</p>
+              <p className="text-slate-400 mt-1">展示所有 w- 开头的项目</p>
             </div>
             <Button variant="outline" size="sm" asChild>
-              <a href="https://github.com/leno23" target="_blank" rel="noopener noreferrer">
+              <a href="https://github.com/wyf027" target="_blank" rel="noopener noreferrer">
                 <Github className="w-4 h-4 mr-2" />
                 访问 GitHub
               </a>
@@ -43,63 +43,63 @@ export default async function ReposPage() {
       <main className="container mx-auto px-4 py-8">
         {/* Stats */}
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
-          <Card className="border-none shadow-sm bg-white/50 backdrop-blur">
+          <Card className="border-none shadow-sm bg-slate-900/70 backdrop-blur">
             <CardContent className="p-6">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-sm font-medium text-gray-600">总仓库数</p>
-                  <p className="text-3xl font-bold text-gray-900 mt-1">{repos.length}</p>
+                  <p className="text-sm font-medium text-slate-400">总仓库数</p>
+                  <p className="text-3xl font-bold text-slate-100 mt-1">{repos.length}</p>
                 </div>
-                <div className="h-12 w-12 bg-blue-100 rounded-xl flex items-center justify-center">
-                  <Github className="h-6 w-6 text-blue-600" />
+                <div className="h-12 w-12 bg-blue-950 rounded-xl flex items-center justify-center">
+                  <Github className="h-6 w-6 text-blue-400" />
                 </div>
               </div>
             </CardContent>
           </Card>
 
-          <Card className="border-none shadow-sm bg-white/50 backdrop-blur">
+          <Card className="border-none shadow-sm bg-slate-900/70 backdrop-blur">
             <CardContent className="p-6">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-sm font-medium text-gray-600">总 Stars</p>
-                  <p className="text-3xl font-bold text-gray-900 mt-1">
+                  <p className="text-sm font-medium text-slate-400">总 Stars</p>
+                  <p className="text-3xl font-bold text-slate-100 mt-1">
                     {repos.reduce((acc, repo) => acc + repo.stargazers_count, 0)}
                   </p>
                 </div>
-                <div className="h-12 w-12 bg-yellow-100 rounded-xl flex items-center justify-center">
+                <div className="h-12 w-12 bg-amber-950 rounded-xl flex items-center justify-center">
                   <Star className="h-6 w-6 text-yellow-600" />
                 </div>
               </div>
             </CardContent>
           </Card>
 
-          <Card className="border-none shadow-sm bg-white/50 backdrop-blur">
+          <Card className="border-none shadow-sm bg-slate-900/70 backdrop-blur">
             <CardContent className="p-6">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-sm font-medium text-gray-600">总 Forks</p>
-                  <p className="text-3xl font-bold text-gray-900 mt-1">
+                  <p className="text-sm font-medium text-slate-400">总 Forks</p>
+                  <p className="text-3xl font-bold text-slate-100 mt-1">
                     {repos.reduce((acc, repo) => acc + repo.forks_count, 0)}
                   </p>
                 </div>
-                <div className="h-12 w-12 bg-green-100 rounded-xl flex items-center justify-center">
-                  <GitFork className="h-6 w-6 text-green-600" />
+                <div className="h-12 w-12 bg-emerald-950 rounded-xl flex items-center justify-center">
+                  <GitFork className="h-6 w-6 text-emerald-400" />
                 </div>
               </div>
             </CardContent>
           </Card>
 
-          <Card className="border-none shadow-sm bg-white/50 backdrop-blur">
+          <Card className="border-none shadow-sm bg-slate-900/70 backdrop-blur">
             <CardContent className="p-6">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-sm font-medium text-gray-600">语言类型</p>
-                  <p className="text-3xl font-bold text-gray-900 mt-1">
+                  <p className="text-sm font-medium text-slate-400">语言类型</p>
+                  <p className="text-3xl font-bold text-slate-100 mt-1">
                     {new Set(repos.map((r) => r.language).filter(Boolean)).size}
                   </p>
                 </div>
-                <div className="h-12 w-12 bg-purple-100 rounded-xl flex items-center justify-center">
-                  <ExternalLink className="h-6 w-6 text-purple-600" />
+                <div className="h-12 w-12 bg-violet-950 rounded-xl flex items-center justify-center">
+                  <ExternalLink className="h-6 w-6 text-violet-400" />
                 </div>
               </div>
             </CardContent>
@@ -111,12 +111,12 @@ export default async function ReposPage() {
           {repos.map((repo) => (
             <Card
               key={repo.id}
-              className="group hover:shadow-xl transition-all duration-300 hover:-translate-y-1 border-none shadow-sm bg-white/70 backdrop-blur"
+              className="group hover:shadow-xl transition-all duration-300 hover:-translate-y-1 border-none shadow-sm bg-slate-900/80 backdrop-blur"
             >
               <CardHeader className="pb-3">
                 <div className="flex items-start justify-between gap-3">
                   <div className="flex-1 min-w-0">
-                    <CardTitle className="text-lg group-hover:text-blue-600 transition-colors truncate">
+                    <CardTitle className="text-lg group-hover:text-blue-400 transition-colors truncate">
                       {repo.name}
                     </CardTitle>
                     <CardDescription className="mt-2 line-clamp-2 min-h-[2.5rem]">
@@ -131,7 +131,7 @@ export default async function ReposPage() {
                 {repo.language && (
                   <div className="flex items-center gap-2">
                     <div className="w-3 h-3 rounded-full bg-gradient-to-r from-blue-400 to-purple-500" />
-                    <span className="text-sm text-gray-600">{repo.language}</span>
+                    <span className="text-sm text-slate-400">{repo.language}</span>
                   </div>
                 )}
 
@@ -152,7 +152,7 @@ export default async function ReposPage() {
                 )}
 
                 {/* Stats */}
-                <div className="flex items-center gap-4 text-sm text-gray-600">
+                <div className="flex items-center gap-4 text-sm text-slate-400">
                   <div className="flex items-center gap-1">
                     <Star className="w-4 h-4" />
                     <span>{repo.stargazers_count}</span>
@@ -189,13 +189,13 @@ export default async function ReposPage() {
         {/* Empty State */}
         {repos.length === 0 && (
           <div className="text-center py-16">
-            <div className="mx-auto h-24 w-24 bg-gradient-to-br from-gray-100 to-gray-200 rounded-full flex items-center justify-center mb-6">
+            <div className="mx-auto h-24 w-24 bg-gradient-to-br from-slate-800 to-slate-900 rounded-full flex items-center justify-center mb-6">
               <Github className="h-12 w-12 text-gray-400" />
             </div>
-            <h3 className="text-xl font-semibold text-gray-900 mb-2">暂无仓库数据</h3>
-            <p className="text-gray-600 mb-6">没有找到以 w- 开头的 GitHub 仓库</p>
+            <h3 className="text-xl font-semibold text-slate-100 mb-2">暂无仓库数据</h3>
+            <p className="text-slate-400 mb-6">没有找到以 w- 开头的 GitHub 仓库</p>
             <Button variant="outline" asChild>
-              <a href="https://github.com/leno23?tab=repositories" target="_blank" rel="noopener noreferrer">
+              <a href="https://github.com/wyf027?tab=repositories" target="_blank" rel="noopener noreferrer">
                 查看所有仓库
               </a>
             </Button>
@@ -204,8 +204,8 @@ export default async function ReposPage() {
       </main>
 
       {/* Footer */}
-      <footer className="border-t bg-white/50 backdrop-blur mt-16">
-        <div className="container mx-auto px-4 py-6 text-center text-sm text-gray-600">
+      <footer className="border-t bg-slate-900/70 backdrop-blur mt-16">
+        <div className="container mx-auto px-4 py-6 text-center text-sm text-slate-400">
           <p>数据来源于 GitHub API，每小时更新一次</p>
         </div>
       </footer>
