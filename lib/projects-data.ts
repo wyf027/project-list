@@ -1,3 +1,4 @@
+import blogSnapshot from "./blog-projects.json"
 import issueSnapshot from "./project-issues.json"
 import { convertIssueToProject, fetchProjectsFromGitHub } from "./github-api"
 
@@ -48,17 +49,40 @@ const previewOverrides: Record<string, { image: string; demoUrl?: string; github
 }
 
 const fallbackProjects = issueSnapshot.map((issue) => convertIssueToProject(issue))
-export async function getProjects(): Promise<Project[]> {
-  const remote = await fetchProjectsFromGitHub()
-  const items = remote.length ? remote : fallbackProjects
-  return [titleCatalog, ...items.map((project) => ({
+function projectKey(project: Project): string {
+  if (!project.demoUrl) return project.id
+  const url = new URL(project.demoUrl)
+  return url.origin + url.pathname.replace(/\/$/, "")
+}
+
+function mergeProjects(items: Project[]): Project[] {
+  const existing = [titleCatalog, ...items.map((project) => ({
     ...project,
     ...previewOverrides[project.id],
     githubUrl: previewOverrides[project.id]?.githubUrl ?? project.githubUrl?.replace("github.com/leno23/", "github.com/wyf027/"),
   }))]
+  const merged = new Map(existing.map((project) => [projectKey(project), project]))
+  for (const blog of blogSnapshot as Project[]) {
+    const key = projectKey(blog)
+    const previous = merged.get(key)
+    merged.set(key, previous ? {
+      ...previous,
+      title: blog.title,
+      demoUrl: blog.demoUrl,
+      description: blog.description,
+      technologies: blog.technologies,
+      githubUrl: blog.githubUrl ?? previous.githubUrl,
+    } : blog)
+  }
+  return [...merged.values()]
+}
+
+export async function getProjects(): Promise<Project[]> {
+  const remote = await fetchProjectsFromGitHub()
+  return mergeProjects(remote.length ? remote : fallbackProjects)
 }
 
 export async function getProjectById(id: string): Promise<Project | null> {
   return (await getProjects()).find((project) => project.id === id) || null
 }
-export const projects = [titleCatalog, ...fallbackProjects]
+export const projects = mergeProjects(fallbackProjects)

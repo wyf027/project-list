@@ -9,10 +9,10 @@ export default async function ProjectsPage() {
   const projects = await getProjects()
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-950 via-slate-950 to-slate-900">
+    <div className="min-h-dvh w-full bg-gradient-to-br from-slate-950 via-slate-950 to-slate-900">
       {/* Header */}
       <header className="border-b bg-slate-950/90 backdrop-blur-sm sticky top-0 z-50">
-        <div className="container mx-auto px-4 py-4">
+        <div className="w-full px-4 py-4 sm:px-6 lg:px-8">
           <div className="flex flex-wrap items-center justify-between gap-4">
             <div>
               <h1 className="text-2xl font-bold text-slate-100">我的项目集合</h1>
@@ -37,7 +37,7 @@ export default async function ProjectsPage() {
       </header>
 
       {/* Main Content */}
-      <main className="container mx-auto px-4 py-8">
+      <main className="w-full px-4 py-6 sm:px-6 lg:px-8">
         {/* Stats */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
           <Card>
@@ -75,7 +75,7 @@ export default async function ProjectsPage() {
               <div className="flex flex-wrap items-center justify-between gap-4">
                 <div>
                   <p className="text-sm font-medium text-slate-400">数据来源</p>
-                  <p className="text-sm font-bold text-slate-100">个人作品 / GitHub</p>
+                  <p className="text-sm font-bold text-slate-100">博客作品 / GitHub</p>
                 </div>
                 <div className="h-12 w-12 bg-violet-950 rounded-lg flex items-center justify-center">
                   <RefreshCw className="h-6 w-6 text-violet-400" />
@@ -86,7 +86,7 @@ export default async function ProjectsPage() {
         </div>
 
         {/* Projects Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 gap-6">
           {projects.map((project, index) => (
             <Card key={project.id} className="group overflow-hidden border-slate-800 bg-slate-900/70 hover:shadow-lg transition-all duration-300 hover:-translate-y-1">
               <CardHeader className="pb-3">
@@ -121,7 +121,7 @@ export default async function ProjectsPage() {
                     width={1440}
                     height={900}
                     alt={project.title}
-                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                    className="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-300"
                   />
                 </div>
 
